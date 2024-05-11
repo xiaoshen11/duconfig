@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "du",
+      "type": "com.bruce.duconfig.demo.DuDemoConfig",
+      "sourceType": "com.bruce.duconfig.demo.DuDemoConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "du.a",
+      "type": "java.lang.String",
+      "sourceType": "com.bruce.duconfig.demo.DuDemoConfig"
+    },
+    {
+      "name": "du.b",
+      "type": "java.lang.String",
+      "sourceType": "com.bruce.duconfig.demo.DuDemoConfig"
+    }
+  ],
+  "hints": []
+}
