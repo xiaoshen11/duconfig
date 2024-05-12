@@ -9,3 +9,7 @@ du:
 
 server:
   port: 8888
+logging:
+  level:
+    root: info
+    cn.kimmking: debug

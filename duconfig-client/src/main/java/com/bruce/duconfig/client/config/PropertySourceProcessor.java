@@ -27,20 +27,23 @@ public class PropertySourceProcessor implements BeanFactoryPostProcessor, Enviro
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        ConfigurableEnvironment env = (ConfigurableEnvironment) environment;
-        if(env.getPropertySources().contains(DU_PROPERTY_SOURCES)) {
+        ConfigurableEnvironment ENV = (ConfigurableEnvironment) environment;
+        if(ENV.getPropertySources().contains(DU_PROPERTY_SOURCES)) {
             return;
         }
         // 通过http请求去duconfig-server获取配置
-        Map<String, String> config = new HashMap<>();
-        config.put("du.a","dev500");
-        config.put("du.b","b600");
-        config.put("du.c","c700");
-        DuConfigService configService = new DuConfigServiceImpl(config);
+        String app = ENV.getProperty("duconfig.app","app1");
+        String env = ENV.getProperty("duconfig.env","dev");
+        String ns = ENV.getProperty("duconfig.ns","public");
+        String configServer = ENV.getProperty("duconfig.configServer","http://localhost:9129");
+
+        ConfigMeta configMeta = new ConfigMeta(app, env, ns, configServer);
+
+        DuConfigService configService = DuConfigService.getDefault(configMeta);
         DuPropertySource propertySource = new DuPropertySource(DU_PROPERTY_SOURCE, configService);
         CompositePropertySource composite = new CompositePropertySource(DU_PROPERTY_SOURCES);
         composite.addPropertySource(propertySource);
-        env.getPropertySources().addFirst(composite);
+        ENV.getPropertySources().addFirst(composite);
     }
 
     @Override
