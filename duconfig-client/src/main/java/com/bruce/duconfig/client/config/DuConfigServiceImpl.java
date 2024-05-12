@@ -1,5 +1,9 @@
 package com.bruce.duconfig.client.config;
 
+import com.bruce.duconfig.client.repository.DuRepositoryChangeListener;
+import org.springframework.cloud.context.environment.EnvironmentChangeEvent;
+import org.springframework.context.ApplicationContext;
+
 import java.util.Map;
 
 /**
@@ -7,9 +11,11 @@ import java.util.Map;
  */
 public class DuConfigServiceImpl implements DuConfigService {
 
+    ApplicationContext applicationContext;
     Map<String, String> config;
 
-    public DuConfigServiceImpl(Map<String, String> config) {
+    public DuConfigServiceImpl(ApplicationContext applicationContext, Map<String, String> config) {
+        this.applicationContext = applicationContext;
         this.config = config;
     }
 
@@ -21,5 +27,14 @@ public class DuConfigServiceImpl implements DuConfigService {
     @Override
     public String getProperty(String name) {
         return this.config.get(name);
+    }
+
+    @Override
+    public void onChange(ChangeEvent event) {
+        this.config = event.config();
+        if(config != null){
+            System.out.println("[DUCONFIG] fire an EnvironmentChangeEvent with keys: " + config.keySet());
+            applicationContext.publishEvent(new EnvironmentChangeEvent(config.keySet()));
+        }
     }
 }

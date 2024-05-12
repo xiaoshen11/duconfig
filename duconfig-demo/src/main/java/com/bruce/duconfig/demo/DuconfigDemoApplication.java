@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -33,6 +34,14 @@ class DuconfigDemoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DuconfigDemoApplication.class, args);
+    }
+
+    @GetMapping("/demo")
+    public String demo(){
+        return "du.a = " + a + "\n"
+                + "du.b = " + b + "\n"
+                + "demo.a = " + demoConfig.getA() + "\n"
+                + "demo.b = " + demoConfig.getB();
     }
 
     @Bean

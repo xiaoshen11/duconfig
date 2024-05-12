@@ -1,7 +1,6 @@
 package com.bruce.duconfig.client.repository;
 
 import com.bruce.duconfig.client.config.ConfigMeta;
-import com.bruce.duconfig.client.config.DuConfigService;
 
 import java.util.Map;
 
@@ -16,5 +15,7 @@ public interface DuRepository {
     }
 
     Map<String,String> getConfig();
+
+    void addListener(DuRepositoryChangeListener listener);
 
 }
