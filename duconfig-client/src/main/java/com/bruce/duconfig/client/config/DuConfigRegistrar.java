@@ -1,5 +1,7 @@
 package com.bruce.duconfig.client.config;
 
+import com.bruce.duconfig.client.value.SpringValueProcessor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -13,22 +15,28 @@ import java.util.Optional;
  * register du config bean.
  * @date 2024/5/11
  */
+@Slf4j
 public class DuConfigRegistrar implements ImportBeanDefinitionRegistrar {
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        System.out.println("register PropertySourceProcessor");
+        registerClass(registry, PropertySourceProcessor.class);
+        registerClass(registry, SpringValueProcessor.class);
+
+    }
+
+    private static void registerClass(BeanDefinitionRegistry registry, Class<?> aClass) {
+        log.info("register " + aClass.getName());
         Optional<String> first = Arrays.stream(registry.getBeanDefinitionNames())
-                .filter(x -> PropertySourceProcessor.class.getName().equals(x)).findFirst();
+                .filter(x -> aClass.getName().equals(x)).findFirst();
 
         if (first.isPresent()) {
-            System.out.println("PropertySourceProcessor already registered");
+            log.info(aClass.getName() + " already registered");
             return;
         }
 
         AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.
-                genericBeanDefinition(PropertySourceProcessor.class).getBeanDefinition();
-        registry.registerBeanDefinition(PropertySourceProcessor.class.getName(), beanDefinition);
-
+                genericBeanDefinition(aClass).getBeanDefinition();
+        registry.registerBeanDefinition(aClass.getName(), beanDefinition);
     }
 }

@@ -20,7 +20,7 @@ import java.util.Arrays;
 @RestController
 class DuconfigDemoApplication {
 
-    @Value("${du.a}")
+    @Value("${du.a}.${du.b}")
     private String a;
 
     @Value("${du.b}")
